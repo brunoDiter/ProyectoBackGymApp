@@ -24,4 +24,27 @@ public class Reserv {
         this.cls=cls;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Usr getUsr() {
+        return usr;
+    }
+
+    public void setUsr(Usr usr) {
+        this.usr = usr;
+    }
+
+    public Cls getCls() {
+        return cls;
+    }
+
+    public void setCls(Cls cls) {
+        this.cls = cls;
+    }
 }
