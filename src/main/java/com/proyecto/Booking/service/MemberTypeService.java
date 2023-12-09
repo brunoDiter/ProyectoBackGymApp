@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberTypeService {
@@ -19,12 +20,40 @@ public class MemberTypeService {
 
     public MemberType getOneById(Long id) {return memberTypeRepository.findById(id).orElse(null);}
 
-    //Agregar verificacion de crear si no existe uno igual
-    public void createMemberType(MemberType memberType) {memberTypeRepository.save(memberType);}
+    public void createMemberType(MemberType memberType) {
 
-    //Agregar verificacion para editar solo si existe
-    public void editMemberType(MemberType memberType) {memberTypeRepository.save(memberType);}
+        if(!memberTypeExist(memberType.getName())){
 
-    //Agregar verificacion de eliminar solo si existe
-    public void deleteMemberType(MemberType memberType) {memberTypeRepository.delete(memberType);}
+            memberTypeRepository.save(memberType);
+        }else {
+            throw new RuntimeException("Membresia existente.");
+        }
+    }
+
+    public void editMemberType(MemberType memberType) {
+
+        if (memberTypeExist(memberType.getName())){
+
+            memberTypeRepository.save(memberType);
+
+        }else {
+            throw new RuntimeException("La membresia no existe.");
+        }
+    }
+    public void deleteMemberType(MemberType memberType) {
+
+        if(memberTypeExist(memberType.getName())){
+
+            memberTypeRepository.delete(memberType);
+
+        }else {
+            throw new RuntimeException("No existe el tipo de membresia.");
+        }
+    }
+
+    private boolean memberTypeExist(String memberTypeName){
+        Optional<MemberType> existingMemberType = memberTypeRepository
+                .findByName(memberTypeName);
+        return existingMemberType.isPresent();
+    }
 }
