@@ -1,46 +1,54 @@
 package com.proyecto.Booking.persistence.entities;
 
+import com.proyecto.Booking.util.Permission;
+import com.proyecto.Booking.util.Role;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Data
+@Builder
 @Entity
-@Table
-public class Usr {
+@Table(name = "Users")
+public class Usr  {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer userId;
+    private Long user_id;
 
-    @Column
-    private String userName;
-    @Column
-    private String email;
-    @Column
-    private String password;
     @Column
     private String firstName;
     @Column
     private String lastName;
 
-    @OneToOne
-    @JoinColumn(name = "role_id")
-    private Rol rol;
+    @Column
+    private String email;
 
 
-    public Integer getUserId() {
-        return userId;
-    }
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity.class, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles;
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+    @Column
+    private String password;
+    @Column
+    private Long tel;
+    @Column
+    private String dni;
 
-    public String getUserName() {
-        return userName;
-    }
+    @ManyToOne
+    @JoinColumn(name= "membership_id")
+    private MemberType membership;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    //GETTERS AND SETTERS
 
     public String getEmail() {
         return email;
@@ -50,9 +58,13 @@ public class Usr {
         this.email = email;
     }
 
+
+
     public String getPassword() {
         return password;
     }
+
+
 
     public void setPassword(String password) {
         this.password = password;
@@ -74,11 +86,57 @@ public class Usr {
         this.lastName = lastName;
     }
 
-    public Rol getRole() {
-        return rol;
+    public String getDni() {
+        return dni;
     }
 
-    public void setRole(Rol role) {
-        this.rol = role;
+    public void setDni(String dni) {
+        this.dni = dni;
     }
+
+    public Long getTel() {
+        return tel;
+    }
+
+    public void setTel(Long tel) {
+        this.tel = tel;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public Set<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleEntity> roles) {
+        this.roles = roles;
+    }
+
+    public MemberType getMembership() {
+        return membership;
+    }
+
+    public void setMembership(MemberType membership) {
+        this.membership = membership;
+    }
+
+    public Usr(long user_id, String firstName, String lastName, String email, Set<RoleEntity> roles, String password,
+               Long tel, String dni, MemberType membership) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.roles = roles;
+        this.password = password;
+        this.tel = tel;
+        this.dni = dni;
+        this.user_id=user_id;
+        this.membership = membership;
+    }
+    public Usr(){}
 }

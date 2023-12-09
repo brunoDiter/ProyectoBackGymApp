@@ -1,6 +1,11 @@
-package com.proyecto.Booking.persistence.entities;
+package com.proyecto.Booking.persistence.dtos;
 
-public class LoginDto {
+
+import lombok.Data;
+
+@Data
+public class AuthenticationRequest {
+
     private String email;
     private String password;
 

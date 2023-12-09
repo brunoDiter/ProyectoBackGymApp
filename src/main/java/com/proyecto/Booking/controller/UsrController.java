@@ -1,40 +1,51 @@
 package com.proyecto.Booking.controller;
 
-import com.proyecto.Booking.persistence.entities.Book;
-import com.proyecto.Booking.persistence.entities.LoginDto;
 import com.proyecto.Booking.persistence.entities.Usr;
 import com.proyecto.Booking.service.UsrService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UsrController {
 
     @Autowired
     UsrService usrService;
 
-    @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody LoginDto usr){
+    @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Usr>> getAll(){return ResponseEntity.ok(usrService.getAll());}
 
-        return ResponseEntity.ok(usrService.userLogin(usr));
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Usr> getOneById(@RequestBody Long id){return ResponseEntity.ok(usrService.getOneById(id));}
 
+    @PostMapping()
+    public ResponseEntity<String> createUser(@RequestBody Usr usr){
+        try {
+
+            usrService.createUser(usr) ;
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+
+    }   catch (Exception e){
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating user");
+        }
     }
 
-    @PostMapping("/crear")
-    public void crear(@RequestBody Usr usr){
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void editUser(@RequestBody Usr usr) {usrService.editUser(usr);}
 
-        usrService.guardarUsr(usr);
-    }
-
-    @GetMapping("/traertodoslosuser")
-    public ResponseEntity<List<Usr>> traertodos(){
-
-        return ResponseEntity.ok(usrService.retornarTodosLosUsrs());
-    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUser(@RequestBody Usr usr) {usrService.deleteUser(usr);}
 
 
 }
