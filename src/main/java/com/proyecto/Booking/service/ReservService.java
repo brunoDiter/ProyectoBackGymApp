@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservService {
@@ -20,10 +21,28 @@ public class ReservService {
     //Agregar verificacion de crear si no existe uno igual
     public void createReserv(Reserv reserv) {reservRepository.save(reserv);}
 
-    //Agregar verificacion para editar solo si existe
-    public void editReserv(Reserv reserv) {reservRepository.save(reserv);}
 
-    //Agregar verificacion de eliminar solo si existe
-    public void deleteReserv(Reserv reserv) {reservRepository.delete(reserv);}
+    public void editReserv(Reserv reserv) {
+
+        if(reservExist(reserv.getId())){
+            reservRepository.save(reserv);
+        }else {
+            throw new RuntimeException("La reserva no existe!");
+        }
+    }
+
+    public void deleteReserv(Reserv reserv) {
+
+        if(reservExist(reserv.getId())){
+            reservRepository.delete(reserv);
+        }else {
+            throw new RuntimeException("No existe la reserva.");
+        }
+    }
+
+    public boolean reservExist(Long reservId){
+        Optional<Reserv> existingReserv = reservRepository.findById(reservId);
+        return existingReserv.isPresent();
+    }
     
 }
