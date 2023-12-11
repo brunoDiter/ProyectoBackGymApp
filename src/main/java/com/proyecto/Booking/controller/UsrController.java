@@ -40,8 +40,7 @@ public class UsrController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void editUser(@RequestBody Usr usr) {usrService.editUser(usr);}
+    public void editUser(@PathVariable Long id, @RequestBody Usr usr) {usrService.editUser(id,usr);}
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

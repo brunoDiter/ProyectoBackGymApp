@@ -4,10 +4,16 @@ package com.proyecto.Booking.service;
 import com.proyecto.Booking.persistence.dtos.AuthenticationRequest;
 import com.proyecto.Booking.persistence.entities.Usr;
 import com.proyecto.Booking.persistence.repository.UsrRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -31,22 +37,57 @@ public class UsrService {
             usrRepository.save(usr);
     }
 
+    public void editUser(Long id,Usr usr) {
 
-    //Agregar verificacion para editar solo si existe
-    public void editUser(Usr usr) {usrRepository.save(usr);}
+        Usr existingUser = usrRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User no existe."));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        System.out.println("el currentUsername es " + currentUsername);
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        System.out.println("Roles del usuario autenticado: " + authorities);
+
+        boolean isSameUser = currentUsername.equals(existingUser.getEmail());
+        System.out.println("el getEmail es " + existingUser.getEmail());
+
+        if(isAdmin || isSameUser){
+            existingUser.setEmail(usr.getEmail());
+            existingUser.setMembership(usr.getMembership());
+            existingUser.setTel(usr.getTel());
+            existingUser.setFirstName(usr.getFirstName());
+            existingUser.setLastName(usr.getLastName());
+            existingUser.setDni(usr.getDni());
+
+            if(isSameUser){
+                String newPassword = usr.getPassword();
+                if (newPassword != null && !newPassword.isEmpty()){
+                    existingUser.setPassword(passwordEncoder.encode(newPassword));
+                }
+            }
+
+            if(!isAdmin){
+
+                existingUser.setRoles(existingUser.getRoles());
+            } else {
+                existingUser.setRoles(usr.getRoles());
+            }
+
+            usrRepository.save(existingUser);
+
+        }else {
+
+            throw new AccessDeniedException("Acceso denegado para editar el usuario");
+        }
+
+    }
 
     //Agregar verificacion de eliminar solo si existe
     public void deleteUser(Usr usr) {usrRepository.delete(usr);}
 
-
-    public boolean userLogin(AuthenticationRequest usr) {
-
-        //usrRepository.findOne(usr.getEmail());
-
-        //System.out.println("Que onda");
-
-        return true;
-    }
 
 
 }
