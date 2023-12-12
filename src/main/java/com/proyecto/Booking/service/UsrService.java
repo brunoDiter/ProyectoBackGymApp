@@ -85,8 +85,18 @@ public class UsrService {
 
     }
 
-    //Agregar verificacion de eliminar solo si existe
-    public void deleteUser(Usr usr) {usrRepository.delete(usr);}
+    public void deleteUser(Long userId) {
+
+        if(usrRepository.existsById(userId)){
+
+            usrRepository.deleteById(userId);
+
+        }else {
+
+            throw new RuntimeException("No existe el usuario con el id " + userId +".");
+        }
+
+        }
 
 
 
