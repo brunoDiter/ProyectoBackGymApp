@@ -24,7 +24,7 @@ public class UsrController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Usr> getOneById(@RequestBody Long id){return ResponseEntity.ok(usrService.getOneById(id));}
+    public ResponseEntity<Usr> getOneById(@PathVariable Long id){return ResponseEntity.ok(usrService.getOneById(id));}
 
     @PostMapping()
     public ResponseEntity<String> createUser(@RequestBody Usr usr){
@@ -49,7 +49,7 @@ public class UsrController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el usuario con el ID " + id);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar el usuario");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar modificar el usuario");
         }
     }
 
@@ -62,7 +62,7 @@ public class UsrController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el usuario con el ID " + userId);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar modificar el usuario");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar el usuario");
         }
     }
 

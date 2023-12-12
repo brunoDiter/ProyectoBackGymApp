@@ -29,7 +29,6 @@ public class UsrService {
 
     public Usr getOneById(Long id) {return usrRepository.findById(id).orElse(null);}
 
-    //Agregar verificacion de crear si no existe uno igual
     public void createUser(Usr usr) {
 
             usr.setPassword(passwordEncoder.encode(usr.getPassword()));
@@ -93,8 +92,7 @@ public class UsrService {
 
         }else {
 
-            throw new RuntimeException("No existe el usuario con el id " + userId +".");
-        }
+            throw new RuntimeException("No existe el usuario con el id " + userId +".");}
 
         }
 
