@@ -52,7 +52,7 @@ public class ClsController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe la clase con el ID " + id);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar la clase");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar editar la clase");
         }
     }
 

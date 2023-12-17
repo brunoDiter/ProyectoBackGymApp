@@ -5,9 +5,6 @@ import jakarta.persistence.*;
 @Entity
 @Table
 public class Cls {
-
-    //Attributes
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,14 +17,12 @@ public class Cls {
     private Boolean disponibility;
     @Column
     private String description;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
-
+    public Cls(){};
     //Method
-
-
     public Usr getUsr() {
         return usr;
     }
