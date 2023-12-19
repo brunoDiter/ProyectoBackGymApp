@@ -21,22 +21,26 @@ public class ClsController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Cls>> getAll(){return ResponseEntity.ok(clsService.getAll());}
+    public ResponseEntity<List<Cls>> getAll() {
+        return ResponseEntity.ok(clsService.getAll());
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cls> getOneById(@PathVariable Long id){return ResponseEntity.ok(clsService.getOneById(id));}
+    public ResponseEntity<Cls> getOneById(@PathVariable Long id) {
+        return ResponseEntity.ok(clsService.getOneById(id));
+    }
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> createCls(@RequestBody Cls cls){
+    public ResponseEntity<String> createCls(@RequestBody Cls cls) {
 
         try {
 
-            clsService.createCls(cls); ;
+            clsService.createCls(cls);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Class created successfully");
 
-        }   catch (Exception e){
+        } catch (Exception e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating class");
         }
@@ -66,6 +70,7 @@ public class ClsController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe la clase con el ID " + id);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar el usuario");}
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar el usuario");
+        }
     }
 }

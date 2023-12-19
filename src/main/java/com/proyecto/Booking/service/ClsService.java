@@ -23,15 +23,24 @@ public class ClsService {
     UsrRepository usrRepository;
 
 
-    public List<Cls> getAll(){return  clsRepository.findAll();}
+    public List<Cls> getAll() {
+        return clsRepository.findAll();
+    }
 
-    public Cls getOneById(Long id) {return clsRepository.findById(id).orElse(null);}
+    public Cls getOneById(Long id) {
+        return clsRepository.findById(id).orElse(null);
+    }
 
-    public void createCls(Cls cls) {clsRepository.save(cls);}
+    public void createCls(Cls cls) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Roles del usuario autenticado: " + authentication.getAuthorities());
+
+        clsRepository.save(cls);
+    }
 
     public void editCls(Long id, Cls cls) {
 
-        Cls existingClass = clsRepository.findById(id).orElseThrow(()->
+        Cls existingClass = clsRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("La clase no existe."));
 
         Usr assignedProfessor = cls.getUsr();
@@ -63,34 +72,36 @@ public class ClsService {
 
     public void deleteCls(Long id) {
 
-        if(clsRepository.existsById(id)){
+        if (clsRepository.existsById(id)) {
 
             clsRepository.deleteById(id);
 
-        }else {
-            throw new RuntimeException("No existe el usuario con el id " + id +".");}}
+        } else {
+            throw new RuntimeException("No existe el usuario con el id " + id + ".");
+        }
+    }
 
 
-
-        private boolean isProfessor() {
+    private boolean isProfessor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            return authentication.getAuthorities().stream()
+        return authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority ->
                         grantedAuthority.getAuthority().equals("ROLE_PROFESSOR") ||
                                 grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-        }
-        private boolean isUserRoleProfessor(Usr user) {
+    }
+
+    private boolean isUserRoleProfessor(Usr user) {
         // Verificar si el usuario tiene el rol de "PROFESSOR"
         return user.getRoles().stream()
                 .anyMatch(role -> role.getName().equals(Role.PROFESSOR));
-        }
+    }
 
-        private boolean isUserAdmin() {
+    private boolean isUserAdmin() {
         // Verificar si el usuario autenticado tiene el rol "ADMIN"
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-        }
-
     }
+
+}

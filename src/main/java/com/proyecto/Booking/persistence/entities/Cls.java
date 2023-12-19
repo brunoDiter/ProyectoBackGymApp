@@ -21,7 +21,11 @@ public class Cls {
     @JoinColumn(name = "usr_id")
     private Usr usr;
 
-    public Cls(){};
+    public Cls() {
+    }
+
+    ;
+
     //Method
     public Usr getUsr() {
         return usr;

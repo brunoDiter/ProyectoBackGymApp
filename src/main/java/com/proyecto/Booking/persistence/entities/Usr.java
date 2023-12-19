@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @Builder
 @Entity
 @Table(name = "Users")
-public class Usr  {
+public class Usr {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -35,7 +36,7 @@ public class Usr  {
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = RoleEntity.class, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleEntity> roles;
+    private Set<RoleEntity> roles = new HashSet<>();
 
     @Column
     private String password;
@@ -45,7 +46,7 @@ public class Usr  {
     private String dni;
 
     @ManyToOne
-    @JoinColumn(name= "membership_id")
+    @JoinColumn(name = "membership_id")
     private MemberType membership;
 
     //GETTERS AND SETTERS
@@ -59,11 +60,9 @@ public class Usr  {
     }
 
 
-
     public String getPassword() {
         return password;
     }
-
 
 
     public void setPassword(String password) {
@@ -135,8 +134,10 @@ public class Usr  {
         this.password = password;
         this.tel = tel;
         this.dni = dni;
-        this.user_id=user_id;
+        this.user_id = user_id;
         this.membership = membership;
     }
-    public Usr(){}
+
+    public Usr() {
+    }
 }
