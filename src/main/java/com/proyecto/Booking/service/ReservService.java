@@ -22,19 +22,19 @@ public class ReservService {
     public void createReserv(Reserv reserv) {reservRepository.save(reserv);}
 
 
-    public void editReserv(Reserv reserv) {
+    public void editReserv(Long id, Reserv reserv) {
 
-        if(reservExist(reserv.getId())){
+        if(reservRepository.existsById(id)){
             reservRepository.save(reserv);
         }else {
             throw new RuntimeException("La reserva no existe!");
         }
     }
 
-    public void deleteReserv(Reserv reserv) {
+    public void deleteReserv(Long id) {
 
-        if(reservExist(reserv.getId())){
-            reservRepository.delete(reserv);
+        if(reservRepository.existsById(id)){
+            reservRepository.deleteById(id);
         }else {
             throw new RuntimeException("No existe la reserva.");
         }

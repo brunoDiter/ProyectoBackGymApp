@@ -8,20 +8,20 @@ public class Membership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
-    @OneToOne
-    @JoinColumn(name= "user_id")
-    private Usr user_Id;
-    @OneToOne
-    @JoinColumn(name= "memberType_id")
-    private MemberType Membertype_Id;
+    @ManyToOne
+    @JoinColumn(name= "usr_id",nullable = false)
+    private Usr usr;
+    @ManyToOne
+    @JoinColumn(name= "MemberType_id",nullable = false)
+    private MemberType memberType;
 
 
-    public Membership(Long id, Usr user_Id, MemberType MemberType_id) {
+    public Membership(Long id, Usr usr, MemberType memberType) {
         this.id = id;
-        this.user_Id = user_Id;
-        this.Membertype_Id = MemberType_id;
+        this.usr = usr;
+        this.memberType = memberType;
     }
     public Membership(){};
 
@@ -35,21 +35,19 @@ public class Membership {
         this.id = id;
     }
 
-    public Usr getUser_Id() {
-        return user_Id;
+    public Usr getUsr() {
+        return usr;
     }
 
-    public void setUser_Id(Usr user_Id) {
-        this.user_Id = user_Id;
+    public void setUsr(Usr usr) {
+        this.usr = usr;
     }
 
-    public MemberType getType_Id() {
-        return Membertype_Id;
+    public MemberType getMemberType() {
+        return memberType;
     }
 
-    public void setType_Id(MemberType type_Id) {
-        this.Membertype_Id = type_Id;
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
     }
-
-
 }

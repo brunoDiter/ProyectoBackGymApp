@@ -20,4 +20,20 @@ public class RoleEntity {
     private long id;
     @Enumerated(EnumType.STRING)
     private Role name;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Role getName() {
+        return name;
+    }
+
+    public void setName(Role name) {
+        this.name = name;
+    }
 }

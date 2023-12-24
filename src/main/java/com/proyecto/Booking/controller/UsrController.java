@@ -2,6 +2,7 @@ package com.proyecto.Booking.controller;
 
 import com.proyecto.Booking.persistence.entities.Usr;
 import com.proyecto.Booking.service.UsrService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UsrController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Usr> getOneById(@RequestBody Long id){return ResponseEntity.ok(usrService.getOneById(id));}
+    public ResponseEntity<Usr> getOneById(@PathVariable Long id){return ResponseEntity.ok(usrService.getOneById(id));}
 
     @PostMapping()
     public ResponseEntity<String> createUser(@RequestBody Usr usr){
@@ -40,12 +41,30 @@ public class UsrController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void editUser(@RequestBody Usr usr) {usrService.editUser(usr);}
+    public ResponseEntity<String> editUser(@PathVariable Long id, @RequestBody Usr usr) {
 
-    @DeleteMapping("/{id}")
+        try {
+            usrService.editUser(id, usr);
+            return ResponseEntity.ok("Usuario modificado correctamente");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el usuario con el ID " + id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar modificar el usuario");
+        }
+    }
+
+    @DeleteMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@RequestBody Usr usr) {usrService.deleteUser(usr);}
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        try {
+            usrService.deleteUser(userId);
+            return ResponseEntity.ok("Usuario eliminado correctamente");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el usuario con el ID " + userId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al intentar eliminar el usuario");
+        }
+    }
 
 
 }

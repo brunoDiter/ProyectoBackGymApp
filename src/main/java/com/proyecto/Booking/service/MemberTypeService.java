@@ -3,6 +3,7 @@ package com.proyecto.Booking.service;
 import com.proyecto.Booking.persistence.entities.Cls;
 import com.proyecto.Booking.persistence.entities.MemberType;
 import com.proyecto.Booking.persistence.repository.MemberTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,21 +31,24 @@ public class MemberTypeService {
         }
     }
 
-    public void editMemberType(MemberType memberType) {
+    public void editMemberType(Long id, MemberType memberType) {
 
-        if (memberTypeExist(memberType.getName())){
 
-            memberTypeRepository.save(memberType);
+        MemberType existingMemberType = memberTypeRepository.findById(id).orElseThrow(()->
+                new EntityNotFoundException("La membresia no existe."));
 
-        }else {
-            throw new RuntimeException("La membresia no existe.");
-        }
+        existingMemberType.setName(memberType.getName());
+        existingMemberType.setDays(memberType.getDays());
+        existingMemberType.setDescription(memberType.getDescription());
+        existingMemberType.setPrice(memberType.getPrice());
+
+        memberTypeRepository.save(memberType);
     }
-    public void deleteMemberType(MemberType memberType) {
+    public void deleteMemberType(Long id) {
 
-        if(memberTypeExist(memberType.getName())){
+        if(memberTypeRepository.existsById(id)){
 
-            memberTypeRepository.delete(memberType);
+            memberTypeRepository.deleteById(id);
 
         }else {
             throw new RuntimeException("No existe el tipo de membresia.");

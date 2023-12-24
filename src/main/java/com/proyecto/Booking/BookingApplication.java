@@ -11,20 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class BookingApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookingApplication.class, args);
-		// Obtiene la contraseña en texto claro desde la base de datos
-		String plaintextPassword = "4610399";
+    public static void main(String[] args) {
+        SpringApplication.run(BookingApplication.class, args);
 
-		// Crea un encoder BCrypt
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-		// Encripta la contraseña
-		String hashedPassword = passwordEncoder.encode(plaintextPassword);
-
-		// Imprime la contraseña encriptada
-		System.out.println("Contraseña encriptada: " + hashedPassword);
-	}
-
+        System.out.println("Aplicacion corriendo! ");
+    }
 
 }
