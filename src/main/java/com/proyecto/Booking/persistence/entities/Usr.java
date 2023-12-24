@@ -46,8 +46,8 @@ public class Usr {
     private String dni;
 
     @ManyToOne
-    @JoinColumn(name = "membership_id")
-    private MemberType membership;
+    @JoinColumn(name = "membertype_id")
+    private MemberType memberType;
 
     //GETTERS AND SETTERS
 
@@ -117,16 +117,16 @@ public class Usr {
         this.roles = roles;
     }
 
-    public MemberType getMembership() {
-        return membership;
+    public MemberType getMemberType() {
+        return memberType;
     }
 
-    public void setMembership(MemberType membership) {
-        this.membership = membership;
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
     }
 
     public Usr(long user_id, String firstName, String lastName, String email, Set<RoleEntity> roles, String password,
-               Long tel, String dni, MemberType membership) {
+               Long tel, String dni, MemberType memberType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -135,7 +135,7 @@ public class Usr {
         this.tel = tel;
         this.dni = dni;
         this.user_id = user_id;
-        this.membership = membership;
+        this.memberType = memberType;
     }
 
     public Usr() {

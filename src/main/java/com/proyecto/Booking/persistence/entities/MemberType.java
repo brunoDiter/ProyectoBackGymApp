@@ -2,7 +2,9 @@ package com.proyecto.Booking.persistence.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "MemberType")
@@ -19,8 +21,8 @@ public class MemberType {
     private Integer days;
     @Column
     private String description;
-    @OneToMany(mappedBy = "user_id")
-    private List<Usr> users;
+    @OneToMany(mappedBy = "memberType")
+    private Set<Usr> users = new HashSet<>();
 
     //GETTERS AND SETTERS
 
@@ -65,21 +67,20 @@ public class MemberType {
         this.description = description;
     }
 
-    public List<Usr> getUsers() {
+    public Set<Usr> getUsers() {
         return users;
     }
 
-    public void setUsers(List<Usr> users) {
+    public void setUsers(Set<Usr> users) {
         this.users = users;
     }
 
-    public MemberType(Long id, String name, Integer price, Integer days, String description, List<Usr> users) {
+    public MemberType(Long id, String name, Integer price, Integer days, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.days = days;
         this.description = description;
-        this.users = users;
     }
     public MemberType(){}
 }

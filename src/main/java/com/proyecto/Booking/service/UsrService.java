@@ -85,7 +85,7 @@ public class UsrService {
 
         if (isAdmin || isSameUser) {
             existingUser.setEmail(usr.getEmail());
-            existingUser.setMembership(usr.getMembership());
+            existingUser.setMemberType(usr.getMemberType());
             existingUser.setTel(usr.getTel());
             existingUser.setFirstName(usr.getFirstName());
             existingUser.setLastName(usr.getLastName());
